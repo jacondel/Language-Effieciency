@@ -1,0 +1,8 @@
+Encodings.txt en characters: 3404 words: 519
+Thoreau.txt en characters: 50735 words: 8870
+Encodings.txt fr characters: 4126 words: 633
+Thoreau.txt fr characters: 79839 words: 10934
+Encodings.txt it characters: 3820 words: 576
+Thoreau.txt it characters: 77944 words: 10404
+Encodings.txt ru characters: 3795 words: 518
+Thoreau.txt ru characters: 133508 words: 17234

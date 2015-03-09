@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+import codecs
 
 
 def howFar(currentIndex,inputString):
@@ -12,9 +12,6 @@ def howFar(currentIndex,inputString):
 
         track=track-1
 
-
-    #r=requests.get('http://translate.reference.com/translate?query=that%20chicken&src=en&dst=fr')
-
 def runWith(lang,files,shouldPrint):
     sol=[]
     for l in lang:
@@ -22,8 +19,12 @@ def runWith(lang,files,shouldPrint):
             stringTrans=translate_spider(f[1],l)
             sol.append([stringTrans])
             if shouldPrint:
-                print(f[0], " ", l," characters: ",len(stringTrans), " words: ", stringTrans.count(" ") )
-                print(stringTrans)
+                stringsFile=str(f[0])+".out."+str(l)+".txt"
+                countsFile="counts.txt"
+                f1=codecs.open(stringsFile,'w','utf-8')
+                f2=codecs.open(countsFile,'a')
+                f1.write(stringTrans)
+                f2.write(str(f[0])+ " "+str(l)+" characters: "+str(len(stringTrans))+ " words: "+ str(stringTrans.count(" "))+'\n')
     return sol
 
 
@@ -33,39 +34,14 @@ def translate_spider(string='default text', lg='fr'):
     solutionString=""
     currentIndex=0
 
-    #url ="http://www.google.com/translate_t?langpair=en|es&text=Hello, world it is good!"
     while currentIndex<len(inputString):
-        #print("running",targetLanguage, currentIndex,"of",len(inputString))
         endingIndex=howFar(currentIndex,inputString)
-        #print("how far:", endingIndex)
         shortenedString=inputString[currentIndex:endingIndex]
         shortenedString=shortenedString.rstrip('\n')
-        #print("shortened String: ",shortenedString)
         url ="http://www.google.com/translate_t?langpair=en|"+targetLanguage+"&text="+shortenedString
-        #print("url: ",url)
-
-        #############
         r=requests.get(url)
         html=str(r.text)
-        #print(html)
         result=extract(html)
-
-
-        #soup = BeautifulSoup(r.text)
-        #print(soup)
-        #links = soup.find_all('span' , {'class': 'long_text'})
-        #print(links.__len__())
-        #if links.__len__() ==0:
-        #    links = soup.find_all("span","short_text")
-        #result=""
-        #for x in links:
-        #    print("inside foreach with x= ", str(x))
-        #    result=x.string
-        #   # result=extract(str(x))
-        #    print("result: ",result)
-        #############
-      #
-
         solutionString=solutionString+result + " "
         currentIndex=endingIndex+1
     return solutionString
@@ -113,7 +89,6 @@ def extract(s):
 
 languages = ['en','fr', 'it', 'ru']
 names = ["Encodings.txt","Thoreau.txt"]
-names = ["Encodings.txt"]
 
 files=[]
 for x in names:
